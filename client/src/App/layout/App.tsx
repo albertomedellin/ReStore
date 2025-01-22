@@ -1,26 +1,22 @@
-import { useEffect, useState } from "react"
-import { Product } from "../models/Product"
-import Catalog from "../../features/catalog/Catalog"
+import { useState } from "react"
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import {  Box, Container, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import NavBar from "./NavBar";
+import { Outlet } from "react-router-dom";
 
 
 
 function App() {
 
-  const [products, setProducts] = useState<Product[]>([])
 
-  useEffect(()=> {
-    fetch('https://localhost:5000/api/products')
-    .then(response => response.json())
-    .then(data => setProducts(data))
-  }, [])
+  const [darkMode, setDarkMode] = useState(false)
 
-  const darkMode = true;
+  const changeDarkMode = () => {
+    setDarkMode(prevMode => !prevMode);
+};
   const palleteType = darkMode ? 'dark' : 'light'
 
   const theme = createTheme({
@@ -35,13 +31,13 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline/>
-      <NavBar/>
+      <NavBar darkMode={darkMode} changeDarkMode={changeDarkMode}/>
       <Box sx={{
         minHeight: '100vh',
-        background: darkMode ? '#121212' : '#eaeaea'
+        background: darkMode ? 'radial-gradient(circle, #1e3aBa, #111B27)' : 'radial-gradient(circle, #beacf9, #f0f9ff)', py: 6
       }}>
-        <Container maxWidth='xl' sx={{mt: 14}}>
-          <Catalog products={products}/>
+        <Container maxWidth='xl' sx={{mt: 8}}>
+          <Outlet/>
         </Container>
       </Box>
     </ThemeProvider>
